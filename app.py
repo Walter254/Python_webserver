@@ -7,7 +7,7 @@ from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
-app.config['JWT_SECRET_KEY'] = 'your_jwt_secret_key' 
+app.config['JWT_SECRET_KEY'] = 'cH1j6Q3fVTVyXs3n9AHxW805X7cgJo5L0z6V0cyWR9D30XktO23EY2ia9Hj8SudHpYZWeiTlwWvv6mO2Cv22Eg' 
 jwt = JWTManager(app)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
