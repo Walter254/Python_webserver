@@ -4,6 +4,56 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chat Room</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; /* Modern and readable font */
+            background-color: #f0f2f5; /* Light grey background for a soft appearance */
+            color: #333; /* Dark grey text for better readability */
+            padding: 20px; /* Padding around the content */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center the elements horizontally */
+            height: 100vh; /* Use full height of the viewport */
+        }
+        ul#messages {
+            list-style-type: none; /* Remove default list styling */
+            padding: 0;
+            width: 90%; /* Use 90% of the body width */
+            max-width: 600px; /* Maximum width for the message list */
+            height: 70vh; /* Use 70% of the viewport height for messages */
+            overflow-y: auto; /* Enable scrolling for overflow */
+            margin-bottom: 20px; /* Space below the message list */
+            background-color: #fff; /* White background for messages */
+            border: 1px solid #ccc; /* Subtle border around the message list */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Soft shadow for depth */
+        }
+        #messages li {
+            padding: 8px 16px; /* Padding inside each message */
+            border-bottom: 1px solid #eee; /* Light line between messages */
+        }
+        #messages li:last-child {
+            border-bottom: none; /* Remove bottom border from the last item */
+        }
+        input[type="text"] {
+            width: 90%; /* Same width as message list */
+            max-width: 600px; /* Maximum width to match the message list */
+            padding: 10px; /* Padding for easier text entry */
+            margin-bottom: 10px; /* Space below the input field */
+            border: 1px solid #ccc; /* Subtle border for the input */
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); /* Inner shadow for depth */
+        }
+        button {
+            padding: 10px 20px; /* Sufficient padding for easy clicking */
+            background-color: #007bff; /* Bootstrap primary color */
+            color: white; /* White text on the button */
+            border: none; /* Remove default border */
+            cursor: pointer; /* Cursor indicates clickable button */
+        }
+        button:hover {
+            background-color: #0056b3; /* Darker blue on hover for interactive feedback */
+        }
+    </style>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
     <script type="text/javascript" charset="utf-8">
         var socket = io.connect('https://' + document.domain + ':' + location.port, {secure: true});

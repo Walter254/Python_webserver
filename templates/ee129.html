@@ -1,10 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head> 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EE129 Course Information</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light gray background for a clean look */
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; /* Modern, legible typography */
+        }
+        h1 {
+            color: #0056b3; /* Deep blue for a strong, professional tone */
+            text-align: center; /* Center-align the heading for focus */
+            margin-bottom: 30px; /* More space below the heading */
+        }
+        p {
+            color: #343a40; /* Dark gray text for excellent readability */
+            font-size: 1.1rem; /* Slightly larger font size */
+            line-height: 1.6; /* Improved line spacing for reading comfort */
+        }
+        ul {
+            list-style-type: none; /* No bullets to keep it clean */
+            padding-left: 20px; /* Indent text slightly */
+        }
+        li::before {
+            content: "•"; /* Add custom bullets */
+            color: #007bff; /* Bootstrap primary blue for the bullet points */
+            display: inline-block; 
+            width: 1em; /* Space before bullet points */
+            margin-left: -1em; /* Align bullets nicely */
+        }
+        a.btn-primary {
+            background-color: #007bff; /* Primary button color for consistency */
+            border-color: #007bff; /* Match border with background */
+            display: block; /* Make the button a block to center it */
+            width: max-content; /* Auto-width based on content */
+            margin: 20px auto 0; /* Center button horizontally and add space above */
+            padding: 10px 20px; /* Larger button padding for better clickability */
+        }
+        a.btn-primary:hover {
+            background-color: #0056b3; /* Darker blue on hover for interactive feedback */
+            border-color: #0056b3; /* Match border with hover background */
+        }
+    </style>    
 </head>
 <body class="container p-5">
     <h1>Welcome to EE129</h1>

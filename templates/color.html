@@ -4,10 +4,30 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Your Color</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        .red-color { color: red; }
-        .green-color { color: green; }
+        body {
+        background-color: #f9f9f9; /* Light neutral background for a clean look */
+        font-family: 'Arial', sans-serif; /* Modern, readable typography */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh; /* Full viewport height */
+        margin: 0; /* Remove default margin */
+        }
+        h1 {
+            font-size: 2.5rem; /* Larger font size for the message */
+            text-transform: uppercase; /* UPPERCASE styling for emphasis */
+            letter-spacing: 1.2px; /* Slightly spaced lettering */
+            margin: 20px 0; /* Space around the heading */
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #ffffff; /* White background for contrast */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+            text-align: center; /* Center text alignment */
+        }
+        .red-color { color: #FF4136; } /* Vivid red for 'red-color' class */
+        .green-color { color: #2ECC40; } /* Vivid green for 'green-color' class */
+
     </style>
 </head>
 <body class="container p-5 {{ color }}">

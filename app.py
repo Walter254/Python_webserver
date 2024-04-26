@@ -13,9 +13,15 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 
 @app.route('/')
 def home():
-    color = request.args.get('color')
-    if color in ['red', 'green']: 
-        return render_template('color.html', color=color + '-color', message=f'Your color is {color}!')
+    page = request.args.get('color')
+    if page == 'red':
+        return render_template('color.html', color='red-color', message='Your color is red!')
+    elif page == 'green':
+        return render_template('color.html', color='green-color', message='Your color is green!')
+    elif page == 'ee129':
+        return render_template('ee129.html')
+    elif page == 'chat':
+        return render_template('chat.html')
     return render_template('index.html')
 
 @app.route('/red')
