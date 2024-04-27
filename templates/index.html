@@ -4,65 +4,86 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Select a Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
             background-color: #f4f4f9; /* Light grey background for a modern look */
-            font-family: 'Arial', sans-serif; /* Modern typography */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern typography */
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center content horizontally */
+        }
+        .content-box {
+            background-color: #ffffff; /* White background for the form area */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtle shadow for 3D effect */
+            padding: 20px;
+            border-radius: 8px; /* Rounded corners for the box */
+            width: 100%;
+            max-width: 400px; /* Limiting max width for better aesthetics */
+            margin-top: 20px;
+        }
+        h1, h2 {
+            text-align: center; /* Center align the headings */
+            color: #333;
         }
         h2 {
-            color: #333; /* Dark grey for better readability */
-            text-align: center; /* Center align the heading */
+            margin-bottom: 20px;
         }
         .form-check-label {
-            font-size: 1.2rem; /* Larger font for better readability */
+            font-size: 1.2rem; /* Larger font for readability */
             color: #5a5a5a; /* Soft black color */
+            display: block; /* Make labels block to align input on the left */
         }
         .form-check-input {
-            height: 20px;
-            width: 20px;
-            margin-top: 0.3rem;
-            margin-right: 0.5rem;
-            border: 0;
-            transition: transform 0.3s ease; /* Smooth scaling transition */
+            margin-right: 10px; /* Space between radio button and label */
         }
-        .form-check-input:checked {
-            background-color: #007bff; /* Use Bootstrap primary color for the checked state */
-            transform: scale(1.2); /* Slightly increase size on check */
-        }
-        .btn-primary {
-            background-color: #007bff; /* Bootstrap primary blue */
+        .btn-primary, .btn-danger {
             border: none;
             padding: 10px 20px;
             font-size: 1.1rem;
-            box-shadow: 0 2px 4px rgba(0, 123, 255, 0.4); /* Soft shadow for 3D effect */
-            transition: background-color 0.3s ease; /* Smooth color transition */
+            margin-top: 20px;
+            border-radius: 5px;
         }
-        .btn-primary:hover {
-            background-color: #0056b3; /* Darker blue on hover for interactive feedback */
+        .btn-primary:hover, .btn-danger:hover {
+            opacity: 0.85; /* Slight transparency on hover for button interaction */
+        }
+        .form-check {
+            text-align: left; /* Align radio buttons to the left */
         }
     </style>
 </head>
-<body class="container p-5">
-    <h2>Select a Page</h2>
-    <form action="/" method="get" class="mt-3">
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="color" id="red" value="red">
-            <label class="form-check-label" for="red">Red</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="color" id="green" value="green">
-            <label class="form-check-label" for="green">Green</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="color" id="ee129" value="ee129">
-            <label class="form-check-label" for="ee129">EE129 Course Info</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" name="color" id="chat" value="chat">
-            <label class="form-check-label" for="chat">Chat Room</label>
-        </div>
-        <button type="submit" class="btn btn-primary mt-3">Submit</button>
-    </form>
+<body>
+    <h1>Welcome to the Home Page</h1>
+    {% if 'logged_in' in session and session['logged_in'] %}
+        <p>Welcome, {{ session['username'] }}!</p>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+    {% else %}
+        <p>Please <a href="{{ url_for('login') }}">login</a> or <a href="{{ url_for('register') }}">register</a>.</p>
+    {% endif %}
+    <div class="content-box">
+        <h2>Select a Page</h2>
+        <form action="/" method="get" class="mt-3">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="color" id="red" value="red">
+                <label class="form-check-label" for="red">Red</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="color" id="green" value="green">
+                <label class="form-check-label" for="green">Green</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="color" id="ee129" value="ee129">
+                <label class="form-check-label" for="ee129">EE129 Course Info</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="color" id="chat" value="chat">
+                <label class="form-check-label" for="chat">Chat Room</label>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Submit</button>
+        </form>
+    </div>
     <!-- Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>

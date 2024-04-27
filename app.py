@@ -4,6 +4,7 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token
 from db import get_db
 from flask_socketio import SocketIO, emit
+from flask import Flask, session, redirect, url_for, request, render_template
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -11,8 +12,56 @@ app.config['JWT_SECRET_KEY'] = 'cH1j6Q3fVTVyXs3n9AHxW805X7cgJo5L0z6V0cyWR9D30Xkt
 jwt = JWTManager(app)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        db = get_db()
+        user = db.users.find_one({"username": username})
+        
+        if user and bcrypt.check_password_hash(user['password'], password):
+            session['logged_in'] = True
+            session['username'] = username
+            return redirect(url_for('home'))
+        else:
+            return render_template('login.html', error='Invalid username or password')
+    return render_template('login.html')
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
+
+        if password != confirm_password:
+            return render_template('register.html', error="Passwords must match.")
+
+        db = get_db()
+        if db.users.find_one({"username": username}):
+            return render_template('register.html', error='Username already exists')
+
+        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+       
+
+
+def is_logged_in():
+    return 'logged_in' in session and session['logged_in']
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    session.pop('username', None)
+    return redirect(url_for('login'))
+
+
 @app.route('/')
 def home():
+    # if not is_logged_in():
+    #     return redirect(url_for('login'))
+    # Show the home page only if logged in
     page = request.args.get('color')
     if page == 'red':
         return render_template('color.html', color='red-color', message='Your color is red!')
@@ -26,45 +75,20 @@ def home():
 
 @app.route('/red')
 def red():
+    # if not is_logged_in():
+    #     return redirect(url_for('login'))
     return render_template('color.html', color='red', message='Your color is red!')
 
 @app.route('/green')
 def green():
+    # if not is_logged_in():
+    #     return redirect(url_for('login'))
     return render_template('color.html', color='green', message='Your color is green!')
-
-@app.route('/register', methods=['POST'])
-def register():
-    db = get_db()
-    users = db.users 
-    username = request.json.get('username')
-    password = request.json.get('password')
-    if users.find_one({"username": username}):
-        logging.warning("Attempt to register with an existing username: {}".format(username))
-        return jsonify({"msg": "Username already exists"}), 409
-
-    hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-    users.insert_one({"username": username, "password": hashed_password})
-    logging.info("User registered successfully: {}".format(username))
-    return jsonify({"msg": "User registered successfully"}), 201
-
-@app.route('/login', methods=['POST'])
-def login():
-    db = get_db()
-    users = db.users
-    username = request.json.get('username')
-    password = request.json.get('password')
-    user = users.find_one({"username": username})
-    
-    if user and bcrypt.check_password_hash(user['password'], password):
-        access_token = create_access_token(identity=username)
-        logging.info("User logged in successfully: {}".format(username))
-        return jsonify(access_token=access_token), 200
-    else:
-        logging.warning("Invalid login attempt for username: {}".format(username))
-        return jsonify({"msg": "Invalid username or password"}), 401
 
 @app.route('/ee129')
 def ee129():
+    # if not is_logged_in():
+    #     return redirect(url_for('login'))
     return render_template('ee129.html')
 
 @app.errorhandler(404)
@@ -80,6 +104,8 @@ def handle_message(data):
 
 @app.route('/chat')
 def chat():
+    # if not is_logged_in():
+    #     return redirect(url_for('login'))
     return render_template('chat.html')
 
 if __name__ == '__main__':
