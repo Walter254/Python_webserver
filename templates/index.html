@@ -55,7 +55,7 @@
     </style>
 </head>
 <body>
-    <h1>Welcome to the Home Page</h1>
+    <h1>Computer Communication Networks</h1>
     {% if 'logged_in' in session and session['logged_in'] %}
         <p>Welcome, {{ session['username'] }}!</p>
         <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>

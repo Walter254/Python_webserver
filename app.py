@@ -1,11 +1,14 @@
 from flask import Flask, request, jsonify, render_template
 from bcrypt import hashpw, gensalt, checkpw
 import logging
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager, create_access_token
 from db import get_db
 from flask_socketio import SocketIO, emit
 from flask import Flask, session, redirect, url_for, request, render_template
+import re
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -13,7 +16,26 @@ app.secret_key = 'cH1j6Q3fVTVyXs3n9AHxW805X7cgJo5L0z6V0cyWR9D30XktO23EY2ia9Hj8Su
 jwt = JWTManager(app)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
+limiter = Limiter(
+    app,
+    default_limits=["5 per minute"]
+)
+
+
+def validate_password(password):
+    """Check for minimum password standards: at least 8 characters, one digit, one uppercase and one lowercase letter."""
+    if len(password) < 8:
+        return False
+    if not re.search("[a-z]", password):
+        return False
+    if not re.search("[A-Z]", password):
+        return False
+    if not re.search("[0-9]", password):
+        return False
+    return True
+
 @app.route('/login', methods=['GET', 'POST'])
+@limiter.limit("10 per minute")  # Rate limit for login attempts
 def login():
     if request.method == 'POST':
         username = request.form['username']
@@ -37,12 +59,18 @@ def login():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        username = request.form['username']
+        username = request.form['username'].strip()
         password = request.form['password']
         confirm_password = request.form['confirm_password']
 
+        if not username or not password or not confirm_password:
+            return render_template('register.html', error="Please fill out all fields.")
+
         if password != confirm_password:
             return render_template('register.html', error="Passwords must match.")
+
+        if not validate_password(password):
+            return render_template('register.html', error="Password must be at least 8 characters and include one digit, one uppercase, and one lowercase letter.")
 
         db = get_db()
         if db is None:
