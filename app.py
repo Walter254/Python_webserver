@@ -17,6 +17,8 @@ client = OpenAI()
 import os
 api_key = os.getenv("OPENAI_API_KEY")
 
+print("API Key:", api_key)
+
 
 
 app = Flask(__name__)
@@ -159,7 +161,7 @@ def handle_message(data):
         user_query = data[4:].strip()
         try:
             response = client.chat.completions.create(
-                model="gpt-3.5-turbo",  # This should be a suitable model for your chat functionality
+                model="gpt-3.5-turbo", 
                 messages=[
                     {"role": "user", "content": user_query}
                 ],
