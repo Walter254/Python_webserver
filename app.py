@@ -79,7 +79,6 @@ def favicon():
 def home():
     if not is_logged_in():
         return redirect(url_for('login'))
-    Show the home page only if logged in
     page = request.args.get('color')
     if page == 'red':
         return render_template('color.html', color='red-color', message='Your color is red!')
