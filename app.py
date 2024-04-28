@@ -10,6 +10,15 @@ from flask_socketio import SocketIO, emit
 from flask import Flask, session, redirect, url_for, request, render_template
 import re
 
+from openai import OpenAI
+
+client = OpenAI()
+
+import os
+api_key = os.getenv("OPENAI_API_KEY")
+
+
+
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 app.secret_key = 'cH1j6Q3fVTVyXs3n9AHxW805X7cgJo5L0z6V0cyWR9D30XktO23EY2ia9Hj8SudHpYZWeiTlwWvv6mO2Cv22Eg' 
@@ -145,7 +154,24 @@ def page_not_found(e):
 @socketio.on('message')
 def handle_message(data):
     logging.info('received message: ' + str(data))
-    emit('message', data, broadcast=True)
+    # Check if the message is intended for the bot
+    if data.startswith('bot:'):
+        user_query = data[4:].strip()
+        try:
+            response = client.chat.completions.create(
+                model="gpt-3.5-turbo",  # This should be a suitable model for your chat functionality
+                messages=[
+                    {"role": "user", "content": user_query}
+                ],
+                max_tokens=150
+            )
+            answer = response.choices[0].text.strip()
+            emit('message', f'Bot: {answer}')
+        except Exception as e:
+            emit('message', 'Bot error: Could not fetch the answer.')
+            logging.error(f"OpenAI API error: {e}")
+    else:
+        emit('message', data, broadcast=True)
 
 @app.route('/chat')
 def chat():
